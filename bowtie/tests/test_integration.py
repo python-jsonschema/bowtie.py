@@ -2006,24 +2006,24 @@ async def test_info_pretty():
     )
     assert stdout == dedent(
         f"""\
-        name: "always_invalid"
-        language: "python"
-        version: "v1.0.0"
-        homepage: "https://bowtie.report/"
-        issues: "https://github.com/bowtie-json-schema/bowtie/issues"
-        language_version: "{platform.python_version()}"
-        os: "{platform.system()}"
-        os_version: "{platform.release()}"
-        source: "https://github.com/bowtie-json-schema/bowtie"
-        dialects: [
-          "https://json-schema.org/draft/2020-12/schema",
-          "https://json-schema.org/draft/2019-09/schema",
-          "http://json-schema.org/draft-07/schema#",
-          "http://json-schema.org/draft-06/schema#",
-          "http://json-schema.org/draft-04/schema#",
-          "http://json-schema.org/draft-03/schema#"
-        ]
-        """,
+        ╭──────────────────┬─────────────────────────────────────────────────────╮
+        │ name             │ always_invalid                                      │
+        │ language         │ python                                              │
+        │ version          │ v1.0.0                                              │
+        │ homepage         │ https://bowtie.report/                              │
+        │ issues           │ https://github.com/bowtie-json-schema/bowtie/issues │
+        │ language version │ {platform.python_version():51} │
+        │ os               │ {platform.system():51} │
+        │ os version       │ {platform.release():51} │
+        │ source           │ https://github.com/bowtie-json-schema/bowtie        │
+        │ dialects         │ https://json-schema.org/draft/2020-12/schema        │
+        │                  │ https://json-schema.org/draft/2019-09/schema        │
+        │                  │ http://json-schema.org/draft-07/schema#             │
+        │                  │ http://json-schema.org/draft-06/schema#             │
+        │                  │ http://json-schema.org/draft-04/schema#             │
+        │                  │ http://json-schema.org/draft-03/schema#             │
+        ╰──────────────────┴─────────────────────────────────────────────────────╯
+        """,  # noqa: E501
     )
     assert stderr == ""
 
@@ -2247,28 +2247,20 @@ async def test_info_links():
     )
     assert stdout == dedent(
         f"""\
-        name: "links"
-        language: "python"
-        version: "v1.0.0"
-        homepage: "urn:example"
-        issues: "urn:example"
-        language_version: "{platform.python_version()}"
-        os: "{platform.system()}"
-        os_version: "{platform.release()}"
-        source: "urn:example"
-        dialects: [
-          "http://json-schema.org/draft-07/schema#"
-        ]
-        links: [
-          {{
-            "description": "foo",
-            "url": "urn:example:foo"
-          }},
-          {{
-            "description": "bar",
-            "url": "urn:example:bar"
-          }}
-        ]
+        ╭──────────────────┬─────────────────────────────────────────╮
+        │ name             │ links                                   │
+        │ language         │ python                                  │
+        │ version          │ v1.0.0                                  │
+        │ homepage         │ urn:example                             │
+        │ issues           │ urn:example                             │
+        │ language version │ {platform.python_version():39} │
+        │ os               │ {platform.system():39} │
+        │ os version       │ {platform.release():39} │
+        │ source           │ urn:example                             │
+        │ dialects         │ http://json-schema.org/draft-07/schema# │
+        │ links            │ urn:example:foo                         │
+        │                  │ urn:example:bar                         │
+        ╰──────────────────┴─────────────────────────────────────────╯
         """,
     )
     assert stderr == ""
