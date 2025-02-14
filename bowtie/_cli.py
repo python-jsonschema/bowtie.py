@@ -1660,6 +1660,19 @@ def latest_report(dialect: Dialect):
     asyncio.run(write(dialect.latest_report()))
 
 
+def _info_rows_for(metadata: list[tuple[str, Any]]):
+    for k, v in metadata:
+        k = k.replace("_", " ")
+
+        match k:
+            case "dialects":
+                yield k, "\n".join(dialect for dialect in v)
+            case "links":
+                yield k, "\n".join(link["url"] for link in v)
+            case _:
+                yield k, v if isinstance(v, str) else json.dumps(v, indent=2)
+
+
 @implementation_subcommand()  # type: ignore[reportArgumentType]
 @format_option()
 @click.option(
@@ -1676,6 +1689,12 @@ async def info(
     Show information about a supported implementation.
     """
     serializable: dict[ConnectableId, dict[str, Any]] = {}
+    table = Table(
+        Column(style="cyan bold"),
+        box=box.ROUNDED,
+        show_header=False,
+        border_style="bright_black",
+    )
 
     async for _, each in start():
         metadata = [(k, v) for k, v in each.info.serializable().items() if v]
@@ -1698,11 +1717,9 @@ async def info(
             case "json":
                 serializable[each.id] = dict(metadata)
             case "pretty":
-                click.echo(
-                    "\n".join(
-                        f"{k}: {json.dumps(v, indent=2)}" for k, v in metadata
-                    ),
-                )
+                for row in _info_rows_for(metadata):
+                    table.add_row(*row)
+                table.add_section()
             case "markdown":
                 click.echo(
                     "\n".join(
@@ -1717,6 +1734,8 @@ async def info(
         else:
             output = serializable
         click.echo(json.dumps(output, indent=2))
+    elif format == "pretty":
+        console.Console().print(table)
 
 
 async def download_versions_of(id: ConnectableId) -> frozenset[str]:
